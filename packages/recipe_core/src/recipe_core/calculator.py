@@ -16,4 +16,12 @@ class RecipeCalculationResult(BaseModel):
 
 def calculate_recipe(recipe: Recipe) -> RecipeCalculationResult:
     total_weight_raw = sum(i.weight_g for i in recipe.ingredients)
+    from .exceptions import EmptyRecipeError, NegativeWeightError
+    if not recipe.ingredients:
+        raise EmptyRecipeError('Рецепт должен содержать ингредиенты')
+    for i in recipe.ingredients:
+        if i.weight_g < 0:
+            raise NegativeWeightError('Вес не может быть отрицательным')
+    
+    final_weight = total_weight_raw * recipe.loss_coefficient
     pass
