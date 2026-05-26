@@ -24,4 +24,8 @@ def calculate_recipe(recipe: Recipe) -> RecipeCalculationResult:
             raise NegativeWeightError('Вес не может быть отрицательным')
     
     final_weight = total_weight_raw * recipe.loss_coefficient
+    total_protein = sum(i.protein * i.weight_g / 100.0 for i in recipe.ingredients)
+    total_fat = sum(i.fat * i.weight_g / 100.0 for i in recipe.ingredients)
+    total_carbs = sum(i.carbs * i.weight_g / 100.0 for i in recipe.ingredients)
+    total_kcal = sum(i.kcal * i.weight_g / 100.0 for i in recipe.ingredients)
     pass
