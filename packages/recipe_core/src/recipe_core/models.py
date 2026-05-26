@@ -8,3 +8,8 @@ class Ingredient(BaseModel):
     fat: float = Field(ge=0.0)
     carbs: float = Field(ge=0.0)
     kcal: float = Field(ge=0.0)
+
+class Recipe(BaseModel):
+    recipe_name: str
+    loss_coefficient: float
+    ingredients: List[Ingredient]
