@@ -1,0 +1,7 @@
+[tool.poetry]
+name = "recipe-calculator-app"
+version = "0.1.0"
+description = "FastAPI and CLI application for recipe KBZhU calculations"
+authors = ["Student <student@isu.ru>"]
+readme = "README.md"
+packages = [{include = "app"}]
