@@ -35,3 +35,16 @@ def test_empty_ingredients_validation():
 
 def test_invalid_loss_coefficient_validation():
     ingredients = [Ingredient(name="Курица", weight_g=200, protein=20, fat=5, carbs=0, kcal=125)]
+    with pytest.raises(ValidationError):
+        Recipe(recipe_name="Ошибка", loss_coefficient=0.0, ingredients=ingredients)
+    with pytest.raises(ValidationError):
+        Recipe(recipe_name="Ошибка", loss_coefficient=-0.1, ingredients=ingredients)
+    with pytest.raises(ValidationError):
+        Recipe(recipe_name="Ошибка", loss_coefficient=1.2, ingredients=ingredients)
+
+@pytest.mark.parametrize("loss_coeff", [0.5, 0.75, 1.0])
+def test_parametrized_loss_coefficient(loss_coeff):
+    ingredients = [Ingredient(name="Курица", weight_g=200, protein=20, fat=5, carbs=0, kcal=125)]
+    recipe = Recipe(recipe_name="Тест", loss_coefficient=loss_coeff, ingredients=ingredients)
+    result = calculate_recipe(recipe)
+    assert result.final_weight == pytest.approx(200 * loss_coeff)
