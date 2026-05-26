@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "recipe-core"
+version = "0.1.0"
+description = "Core recipe KBZhU calculator domain logic library"
+authors = ["Student <student@isu.ru>"]
+readme = "README.md"
+packages = [{include = "recipe_core", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pydantic = "^2.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
