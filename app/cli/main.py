@@ -13,3 +13,13 @@ def fix_windows_encoding():
             sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
         except Exception:
             pass
+
+def main():
+    fix_windows_encoding()
+
+    if len(sys.argv) < 2:
+        print("Ошибка: укажите путь к файлу рецепта.")
+        print("Использование: python -m app.cli.main <recipe.json>")
+        sys.exit(1)
+
+    file_path = sys.argv[1]
