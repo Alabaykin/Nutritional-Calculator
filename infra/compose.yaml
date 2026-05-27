@@ -23,3 +23,17 @@ services:
       context: ..
       dockerfile: Dockerfile
     container_name: recipe_api
+    ports:
+      - "8000:8000"
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: recipe_db
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
