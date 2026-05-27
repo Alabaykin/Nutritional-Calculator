@@ -47,3 +47,4 @@ def get_recipes():
     try:
         return database.get_recipe_history()
     except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
