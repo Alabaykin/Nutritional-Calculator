@@ -16,3 +16,14 @@ def test_cli_smoke():
     for encoding in ["utf-8", "cp1251", "cp866"]:
         try:
             stdout = result.stdout.decode(encoding)
+            stderr = result.stderr.decode(encoding)
+            break
+        except UnicodeDecodeError:
+            continue
+            
+    if stdout is None:
+        stdout = result.stdout.decode("utf-8", errors="ignore")
+        stderr = result.stderr.decode("utf-8", errors="ignore")
+    
+    assert result.returncode == 0, f"Error code {result.returncode}. Stderr: {stderr}. Stdout: {stdout}"
+    
