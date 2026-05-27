@@ -33,3 +33,34 @@ def main():
             data = json.load(f)
     except json.JSONDecodeError:
         print("Ошибка: Неверный формат JSON.")
+        sys.exit(1)
+
+    try:
+        recipe = Recipe(**data)
+    except Exception as e:
+        print(f"Ошибка валидации данных рецепта: {e}")
+        sys.exit(1)
+
+    try:
+        res = calculate_recipe(recipe)
+    except RecipeError as e:
+        print(f"Ошибка расчета: {e}")
+        sys.exit(1)
+
+    print(f"Рецепт: {res.recipe_name}")
+    print(f"Сырой вес: {res.total_weight_raw:.1f}г -> Вес готового блюда: {res.final_weight:.1f}г")
+    print("-" * 30)
+    print("Итого КБЖУ на все блюдо:")
+    print(f"Калории: {res.total_kcal:.1f} ккал")
+    print(f"Белки: {res.total_protein:.1f} г")
+    print(f"Жиры: {res.total_fat:.1f} г")
+    print(f"Углеводы: {res.total_carbs:.1f} г")
+    print("-" * 30)
+    print("КБЖУ на 100г готового блюда:")
+    print(f"Калории: {res.kcal_100g:.1f} ккал")
+    print(f"Белки: {res.protein_100g:.1f} г")
+    print(f"Жиры: {res.fat_100g:.1f} г")
+    print(f"Углеводы: {res.carbs_100g:.1f} г")
+
+if __name__ == "__main__":
+    main()

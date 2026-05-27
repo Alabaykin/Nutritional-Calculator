@@ -1,0 +1,22 @@
+{
+    "recipe_name": "Куриная грудка с гречкой",
+    "loss_coefficient": 0.8,
+    "ingredients": [
+        {
+            "name": "Куриное филе сырое",
+            "weight_g": 200,
+            "protein": 23.6,
+            "fat": 1.9,
+            "carbs": 0.4,
+            "kcal": 113
+        },
+        {
+            "name": "Гречка сухая",
+            "weight_g": 100,
+            "protein": 12.6,
+            "fat": 3.3,
+            "carbs": 62.1,
+            "kcal": 313
+        }
+    ]
+}
