@@ -28,3 +28,22 @@ def calculate(recipe: Recipe):
     try:
         res = calculate_recipe(recipe)
         try:
+            row_id = database.save_recipe_calculation(res)
+            result_dict = res.to_dict()
+            result_dict["id"] = row_id
+            return result_dict
+        except Exception as e:
+            result_dict = res.to_dict()
+            result_dict["id"] = None
+            result_dict["warning"] = f"Failed to save in DB: {str(e)}"
+            return result_dict
+    except RecipeError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+@app.get("/recipes")
+def get_recipes():
+    try:
+        return database.get_recipe_history()
+    except Exception as e:
