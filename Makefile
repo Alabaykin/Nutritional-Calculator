@@ -47,3 +47,12 @@ docs:
 
 compose-up:
 	docker compose -f infra/compose.yaml up --build -d
+
+compose-down:
+	docker compose -f infra/compose.yaml down -v
+
+check: test build-lib docs
+	@echo "All checks passed successfully!"
+
+clean:
+	rm -rf .pytest_cache .coverage htmlcov docs/build build dist packages/recipe_core/dist packages/recipe_core/build docs/_build
