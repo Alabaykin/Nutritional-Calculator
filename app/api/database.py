@@ -78,3 +78,7 @@ def save_recipe_calculation(res):
 def get_recipe_history():
     conn = get_db_connection()
     with conn.cursor() as cur:
+        cur.execute("SELECT * FROM recipes ORDER BY id DESC")
+        rows = cur.fetchall()
+    conn.close()
+    return rows
