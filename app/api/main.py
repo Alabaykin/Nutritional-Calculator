@@ -22,3 +22,9 @@ def health_check():
         return {"status": "healthy", "database": "connected"}
     except Exception as e:
         return {"status": "unhealthy", "database": f"error: {str(e)}"}
+
+@app.post("/calculate")
+def calculate(recipe: Recipe):
+    try:
+        res = calculate_recipe(recipe)
+        try:
