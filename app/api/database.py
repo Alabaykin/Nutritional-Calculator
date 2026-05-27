@@ -32,3 +32,23 @@ def init_db():
             break
         except Exception:
             time.sleep(1)
+
+    conn = get_db_connection()
+    with conn.cursor() as cur:
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS recipes (
+                id SERIAL PRIMARY KEY,
+                recipe_name VARCHAR(255) NOT NULL,
+                total_weight_raw DOUBLE PRECISION NOT NULL,
+                final_weight DOUBLE PRECISION NOT NULL,
+                total_protein DOUBLE PRECISION NOT NULL,
+                total_fat DOUBLE PRECISION NOT NULL,
+                total_carbs DOUBLE PRECISION NOT NULL,
+                total_kcal DOUBLE PRECISION NOT NULL,
+                protein_100g DOUBLE PRECISION NOT NULL,
+                fat_100g DOUBLE PRECISION NOT NULL,
+                carbs_100g DOUBLE PRECISION NOT NULL,
+                kcal_100g DOUBLE PRECISION NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
