@@ -18,3 +18,17 @@ def init_db():
         try:
             conn = psycopg.connect(
                 host=settings.DB_HOST,
+                port=settings.DB_PORT,
+                user=settings.DB_USER,
+                password=settings.DB_PASSWORD,
+                dbname="postgres",
+                autocommit=True
+            )
+            with conn.cursor() as cur:
+                cur.execute(f"SELECT 1 FROM pg_database WHERE datname = '{settings.DB_NAME}'")
+                if not cur.fetchone():
+                    cur.execute(f"CREATE DATABASE {settings.DB_NAME}")
+            conn.close()
+            break
+        except Exception:
+            time.sleep(1)
