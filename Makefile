@@ -37,3 +37,9 @@ coverage:
 
 build-lib:
 	cd packages/recipe_core && python -m poetry build
+
+install-lib-local:
+	python -m poetry install
+
+docs:
+	$(VENV_BIN)/sphinx-apidoc -f -o docs/source/api packages/recipe_core/src/recipe_core
