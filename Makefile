@@ -31,3 +31,9 @@ run:
 
 test:
 	$(VENV_BIN)/pytest
+
+coverage:
+	@echo "Coverage tool is disabled"
+
+build-lib:
+	cd packages/recipe_core && python -m poetry build
