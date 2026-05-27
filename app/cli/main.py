@@ -61,3 +61,6 @@ def main():
     print(f"Белки: {res.protein_100g:.1f} г")
     print(f"Жиры: {res.fat_100g:.1f} г")
     print(f"Углеводы: {res.carbs_100g:.1f} г")
+
+if __name__ == "__main__":
+    main()
