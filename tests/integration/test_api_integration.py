@@ -47,3 +47,4 @@ def test_calculate_endpoint_validation_error():
         "ingredients": []
     }
     response = client.post("/calculate", json=payload)
+    assert response.status_code == 422
