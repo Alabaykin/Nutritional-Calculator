@@ -22,3 +22,12 @@ help:
 	@echo "  compose-down       Остановить контейнеры Docker"
 	@echo "  check              Запустить полную проверку (тесты, сборка либы, сборка доков)"
 	@echo "  clean              Очистить кэши и временные файлы"
+
+setup:
+	python -m poetry install
+
+run:
+	$(VENV_BIN)/uvicorn app.api.main:app --host 0.0.0.0 --port 8000 --reload
+
+test:
+	$(VENV_BIN)/pytest
