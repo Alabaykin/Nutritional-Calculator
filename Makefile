@@ -43,3 +43,7 @@ install-lib-local:
 
 docs:
 	$(VENV_BIN)/sphinx-apidoc -f -o docs/source/api packages/recipe_core/src/recipe_core
+	cd docs && $(VENV_BIN)/sphinx-build -b html source _build/html
+
+compose-up:
+	docker compose -f infra/compose.yaml up --build -d
