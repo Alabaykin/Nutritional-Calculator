@@ -52,3 +52,29 @@ def init_db():
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
+        conn.commit()
+    conn.close()
+
+def save_recipe_calculation(res):
+    conn = get_db_connection()
+    with conn.cursor() as cur:
+        cur.execute("""
+            INSERT INTO recipes (
+                recipe_name, total_weight_raw, final_weight,
+                total_protein, total_fat, total_carbs, total_kcal,
+                protein_100g, fat_100g, carbs_100g, kcal_100g
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            RETURNING id
+        """, (
+            res.recipe_name, res.total_weight_raw, res.final_weight,
+            res.total_protein, res.total_fat, res.total_carbs, res.total_kcal,
+            res.protein_100g, res.fat_100g, res.carbs_100g, res.kcal_100g
+        ))
+        row_id = cur.fetchone()["id"]
+        conn.commit()
+    conn.close()
+    return row_id
+
+def get_recipe_history():
+    conn = get_db_connection()
+    with conn.cursor() as cur:
