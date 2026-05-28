@@ -1,0 +1,35 @@
+sequenceDiagram
+    autonumber
+    actor User as 👤 Пользователь (Клиент)
+    participant API as 🚀 Web API (app/api/main.py)
+    participant Core as 🧩 Core Domain (recipe_core)
+    participant DB as 🗄️ Database (PostgreSQL)
+
+    User->>API: POST /calculate с JSON-данными рецепта
+    activate API
+    
+    Note over API,Core: Слой FastAPI принимает запрос и передает Pydantic-моделям
+    
+    API->>Core: Инициализация Recipe(**data)
+    activate Core
+    Note right of Core: Автоматическая валидация:<br/>- Проверка типов данных<br/>- Исключение отрицательного веса<br/>- Контроль loss_coefficient
+    Core-->>API: Валидный объект Recipe
+    deactivate Core
+
+    API->>Core: Вызов calculate_recipe(recipe)
+    activate Core
+    Note right of Core: Расчет КБЖУ готового блюда:<br/>1. Сумма сырых КБЖУ<br/>2. Расчет готового веса (raw_weight * loss_coeff)<br/>3. Пересчет плотности БЖУК на 100г
+    Core-->>API: Объект RecipeCalculationResult
+    deactivate Core
+
+    Note over API: Преобразование результата в словарь через .to_dict()
+
+    API->>DB: Вызов save_recipe_calculation(result)
+    activate DB
+    Note right of DB: Выполнение SQL-запроса INSERT<br/>в таблицу 'recipes'
+    DB-->>API: Сгенерированный ID записи (например, 42)
+    deactivate DB
+
+    API-->>User: HTTP 200 OK с полным JSON-отчетом и ID расчёта
+    deactivate API
+
