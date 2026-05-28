@@ -48,3 +48,15 @@ def test_parametrized_loss_coefficient(loss_coeff):
     recipe = Recipe(recipe_name="Тест", loss_coefficient=loss_coeff, ingredients=ingredients)
     result = calculate_recipe(recipe)
     assert result.final_weight == pytest.approx(200 * loss_coeff)
+
+def test_zero_weight_ingredients():
+    # Ингредиент с весом 0.0 допустим валидацией Pydantic,
+    # но приводит к final_weight = 0.0. Проверим обнуление расчетных БЖУК на 100г.
+    ingredients = [Ingredient(name="Вода", weight_g=0.0, protein=0, fat=0, carbs=0, kcal=0)]
+    recipe = Recipe(recipe_name="Пустая вода", loss_coefficient=0.8, ingredients=ingredients)
+    result = calculate_recipe(recipe)
+    assert result.final_weight == 0.0
+    assert result.protein_100g == 0.0
+    assert result.fat_100g == 0.0
+    assert result.carbs_100g == 0.0
+    assert result.kcal_100g == 0.0
