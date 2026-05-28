@@ -1,0 +1,37 @@
+flowchart TB
+    %% Стилизация узлов
+    classDef userStyle fill:#2b5c8f,stroke:#1a3a60,stroke-width:2px,color:#fff,rx:10px,ry:10px;
+    classDef appStyle fill:#e6f2ff,stroke:#2b5c8f,stroke-width:2px,color:#1a3a60;
+    classDef coreStyle fill:#e6ffe6,stroke:#008000,stroke-width:2px,color:#003300;
+    classDef dbStyle fill:#fff0e6,stroke:#ff6600,stroke-width:2px,color:#4d1f00;
+
+    User[Пользователь]:::userStyle
+
+    subgraph AppContainer ["Граница приложения"]
+        subgraph DeliveryLayer ["Слой доставки"]
+            CLI["CLI-Интерфейс<br/>(app/cli/main.py)"]:::appStyle
+            API["Web REST API<br/>(FastAPI + Uvicorn)"]:::appStyle
+        end
+
+        subgraph CoreLayer ["Бизнес-логика"]
+            Core["Библиотека recipe_core<br/>(Вычисления и Валидация)"]:::coreStyle
+        end
+        
+        subgraph DBStore ["Хранилище данных"]
+            DB[("БД PostgreSQL<br/>(Логирование расчетов)")]:::dbStyle
+        end
+    end
+
+    %% Связи и взаимодействия
+    User -->|"Запуск из консоли JSON-файлом"| CLI
+    User -->|"HTTP-запросы (Swagger / Frontend)"| API
+    
+    CLI -->|"Импорт моделей и формул"| Core
+    API -->|"Импорт моделей и формул"| Core
+    API -->|"Сохранение истории КБЖУ"| DB
+
+    %% Стилизация подграфов
+    style AppContainer fill:#fdfdfd,stroke:#999,stroke-width:2px,stroke-dasharray: 5 5,color:#333;
+    style DeliveryLayer fill:#f2f7fc,stroke:#bcd2ee,stroke-width:1px,color:#1a3a60;
+    style CoreLayer fill:#f2fcf2,stroke:#bceeec,stroke-width:1px,color:#003300;
+    style DBStore fill:#fefaf7,stroke:#ffd9c2,stroke-width:1px,color:#4d1f00;

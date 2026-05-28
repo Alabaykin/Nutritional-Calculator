@@ -1,0 +1,56 @@
+classDiagram
+    direction TB
+
+    %% Класс Ингредиент
+    class Ingredient {
+        +str name
+        +float weight_g
+        +float protein
+        +float fat
+        +float carbs
+        +float kcal
+    }
+
+    %% Класс Рецепт
+    class Recipe {
+        +str recipe_name
+        +float loss_coefficient
+        +List~Ingredient~ ingredients
+        +check_ingredients_not_empty(v) validator$
+    }
+
+    %% Класс Результат расчета
+    class RecipeCalculationResult {
+        +str recipe_name
+        +float total_weight_raw
+        +float final_weight
+        +float total_protein
+        +float total_fat
+        +float total_carbs
+        +float total_kcal
+        +float protein_100g
+        +float fat_100g
+        +float carbs_100g
+        +float kcal_100g
+        +to_dict() Dict
+    }
+
+    %% Отношения между доменными моделями
+    Recipe "1" *-- "1..*" Ingredient : ингредиенты
+    RecipeCalculationResult ..> Recipe : расчет на основе
+
+    %% Иерархия доменных исключений
+    class RecipeError {
+        <<exception>>
+    }
+    class NegativeWeightError {
+        <<exception>>
+    }
+    class EmptyRecipeError {
+        <<exception>>
+    }
+
+    RecipeError <|-- NegativeWeightError
+    RecipeError <|-- EmptyRecipeError
+
+    RecipeCalculationResult ..> RecipeError : возбуждает при сбоях
