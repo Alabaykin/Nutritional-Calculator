@@ -43,8 +43,9 @@ run: setup
 test: setup
 	$(VENV_BIN)/pytest
 
-coverage:
-	@echo "Coverage tool is disabled"
+coverage: setup
+	$(VENV_BIN)/pytest --cov=recipe_core --cov=app --cov-report=html
+	@echo "Отчет о покрытии успешно сгенерирован в папке htmlcov/"
 
 build-lib: setup
 	cd packages/recipe_core && ../../$(POETRY) build
