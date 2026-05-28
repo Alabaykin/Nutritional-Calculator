@@ -41,10 +41,10 @@ run: setup
 	$(VENV_BIN)/uvicorn app.api.main:app --host 0.0.0.0 --port 8000 --reload
 
 test: setup
-	$(VENV_BIN)/pytest
+	$(VENV_BIN)/pytest -v
 
 coverage: setup
-	$(VENV_BIN)/pytest --cov=recipe_core --cov=app --cov-report=html
+	$(VENV_BIN)/pytest -v --cov=recipe_core --cov=app --cov-report=html
 	@echo "Отчет о покрытии успешно сгенерирован в папке htmlcov/"
 
 build-lib: setup
