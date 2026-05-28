@@ -1,9 +1,16 @@
-# Кроссплатформенное определение папки бинарников локального виртуального окружения
+VENV = .venv
+
 ifeq ($(OS),Windows_NT)
-    VENV_BIN = .venv/Scripts
+    VENV_BIN = $(VENV)/Scripts
+    PYTHON_SYS = python
 else
-    VENV_BIN = .venv/bin
+    VENV_BIN = $(VENV)/bin
+    PYTHON_SYS = python3
 endif
+
+PYTHON = $(VENV_BIN)/python
+PIP = $(VENV_BIN)/pip
+POETRY = $(VENV_BIN)/poetry
 
 .PHONY: help setup run test coverage build-lib install-lib-local docs compose-up compose-down check clean
 
@@ -23,27 +30,31 @@ help:
 	@echo "  check              Запустить полную проверку (тесты, сборка либы, сборка доков)"
 	@echo "  clean              Очистить кэши и временные файлы"
 
-setup:
-	python -m poetry install
+$(VENV):
+	$(PYTHON_SYS) -m venv $(VENV)
+	$(VENV_BIN)/pip install poetry
 
-run:
+setup: $(VENV)
+	$(POETRY) install
+
+run: setup
 	$(VENV_BIN)/uvicorn app.api.main:app --host 0.0.0.0 --port 8000 --reload
 
-test:
+test: setup
 	$(VENV_BIN)/pytest
 
 coverage:
 	@echo "Coverage tool is disabled"
 
-build-lib:
-	cd packages/recipe_core && python -m poetry build
+build-lib: setup
+	cd packages/recipe_core && ../../$(POETRY) build
 
-install-lib-local:
-	python -m poetry install
+install-lib-local: setup
+	$(POETRY) install
 
-docs:
+docs: setup
 	$(VENV_BIN)/sphinx-apidoc -f -o docs/source/api packages/recipe_core/src/recipe_core
-	cd docs && $(VENV_BIN)/sphinx-build -b html source _build/html
+	cd docs && ../$(VENV_BIN)/sphinx-build -b html source _build/html
 
 compose-up:
 	docker compose -f infra/compose.yaml up --build -d
@@ -55,4 +66,4 @@ check: test build-lib docs
 	@echo "All checks passed successfully!"
 
 clean:
-	rm -rf .pytest_cache .coverage htmlcov docs/build build dist packages/recipe_core/dist packages/recipe_core/build docs/_build
+	rm -rf $(VENV) .pytest_cache .coverage htmlcov docs/build build dist packages/recipe_core/dist packages/recipe_core/build docs/_build
